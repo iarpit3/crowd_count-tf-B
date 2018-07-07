@@ -46,7 +46,7 @@ if input_feed.find('.jpg', len(input_feed)-5, len(input_feed))!=-1 or input_feed
         x = graph.get_tensor_by_name('Placeholder:0')
         y_pred = sess.run(op_to_restore, feed_dict={x: x_in})
         sum = np.int32(np.sum(y_pred))
-        if sum - 15 > 0:
+        if not sum - 15 <= 0:
             sum -= 15
         print(sum)
         count = "Crowd Count - " + str(sum)
@@ -57,7 +57,7 @@ else:
     with tf.Session() as sess:
         feed_vid = cv2.VideoCapture(input_feed)
         success = True
-        while success:
+        if success:
             success, im = feed_vid.read()
             print("success-", success)
             new_saver = tf.train.import_meta_graph(model_path)
@@ -65,22 +65,31 @@ else:
             graph = tf.get_default_graph()
             op_to_restore = graph.get_tensor_by_name("add_12:0")
             x = graph.get_tensor_by_name('Placeholder:0')
+            #counter = 0
+            #imlist = []
             while success:
                 img = np.copy(im)
+                img = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
                 img = np.array(img)
                 img = (img - 127.5) / 128
-                print(img.shape)
+                #print(img.shape)
                 x_in = np.reshape(img, (1, img.shape[0], img.shape[1], 1))
                 x_in = np.float32(x_in)
                 y_pred = []
                 y_pred = sess.run(op_to_restore, feed_dict={x: x_in})
                 sum = np.int32(np.sum(y_pred))
-                if sum - 15 > 0:
+                if not sum - 15 <= 0:
                     sum -= 15
                 print(sum)
-                count = "Crowd Count - " + str(sum)
-                cv2.putText(im, count, (0, 0), font, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
-                cv2.imshow('Crowd Count', im)
+                #count = "Crowd Count - " + str(sum)
+                #counter += 1
+                #cv2.putText(im, count, (0, 0), font, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
+                #imlist.append(im)
+                '''if counter==10:
+                    for e in imlist:
+                        cv2.imshow('Crowd Count', im)
+                    imlist = []
+                    counter = 0'''
                 success, im = feed_vid.read()
         feed_vid.release()
         cv2.destroyAllWindows()
