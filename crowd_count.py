@@ -65,9 +65,22 @@ else:
             graph = tf.get_default_graph()
             op_to_restore = graph.get_tensor_by_name("add_12:0")
             x = graph.get_tensor_by_name('Placeholder:0')
-            #counter = 0
+            # Find OpenCV version
+            #(major_ver, minor_ver, subminor_ver) = (cv2.__version__).split('.')
+            #if int(major_ver)<3:
+            fps = feed_vid.get(cv2.CAP_PROP_FPS)
+            #print "Frames per second using video.get(cv2.cv.CV_CAP_PROP_FPS): {0}".format(fps)
+            #else:
+            # fps = video.get(cv2.CAP_PROP_FPS)
+            #print "Frames per second using video.get(cv2.CAP_PROP_FPS) : {0}".format(fps)
+            fps = np.int32(fps)
+            print(fps)
+            counter = 0
+            avg = 0
             #imlist = []
-            while success:
+            file = open("Count_per_sec_2.txt", "w")
+            while success: 
+                counter +=1
                 img = np.copy(im)
                 img = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
                 img = np.array(img)
@@ -78,9 +91,17 @@ else:
                 y_pred = []
                 y_pred = sess.run(op_to_restore, feed_dict={x: x_in})
                 sum = np.int32(np.sum(y_pred))
-                if not sum - 15 <= 0:
-                    sum -= 15
-                print(sum)
+                if sum - 15 <= 0:
+                    sum += 15
+                if counter<=fps:
+                    avg += sum
+                else:
+                    counter =0 
+                    avg = np.int32(avg/fps)
+                    print(avg)
+                    file.write(str(avg)+"/n")
+                    avg = 0
+                    avg += sum
                 #count = "Crowd Count - " + str(sum)
                 #counter += 1
                 #cv2.putText(im, count, (0, 0), font, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
@@ -91,5 +112,6 @@ else:
                     imlist = []
                     counter = 0'''
                 success, im = feed_vid.read()
+        file.close()
         feed_vid.release()
         cv2.destroyAllWindows()
