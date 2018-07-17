@@ -78,7 +78,7 @@ else:
             counter = 0
             avg = 0
             #imlist = []
-            file = open("Count_per_sec_2.txt", "w")
+            file = open("Count_per_sec_Vid5_1.txt", "w")
             while success: 
                 counter +=1
                 img = np.copy(im)
@@ -90,9 +90,9 @@ else:
                 x_in = np.float32(x_in)
                 y_pred = []
                 y_pred = sess.run(op_to_restore, feed_dict={x: x_in})
-                sum = np.int32(np.sum(y_pred))
-                if sum - 15 <= 0:
-                    sum += 15
+                sum =np.absolute(np.int32(np.sum(y_pred)))
+                '''if sum - 15 <= 0:
+                    sum += 20'''
                 if counter<=fps:
                     avg += sum
                 else:
