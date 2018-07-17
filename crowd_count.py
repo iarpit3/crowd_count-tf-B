@@ -99,7 +99,7 @@ else:
                     counter =0 
                     avg = np.int32(avg/fps)
                     print(avg)
-                    file.write(str(avg)+"/n")
+                    file.write(str(avg))
                     avg = 0
                     avg += sum
                 #count = "Crowd Count - " + str(sum)
