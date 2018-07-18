@@ -74,11 +74,11 @@ else:
             # fps = video.get(cv2.CAP_PROP_FPS)
             #print "Frames per second using video.get(cv2.CAP_PROP_FPS) : {0}".format(fps)
             fps = np.int32(fps)
-            print(fps)
+            print("Frames Per Second:",fps,"\n")
             counter = 0
             avg = 0
             #imlist = []
-            file = open("Count_per_sec_Vid5_1.txt", "w")
+            file = open("Count_per_sec_Vid6_1.txt", "w")
             while success: 
                 counter +=1
                 img = np.copy(im)
@@ -100,6 +100,7 @@ else:
                     avg = np.int32(avg/fps)
                     print(avg)
                     file.write(str(avg))
+                    file.write("\n")
                     avg = 0
                     avg += sum
                 #count = "Crowd Count - " + str(sum)
