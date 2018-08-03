@@ -51,9 +51,9 @@ def pipeline(img):
     txt ='Crowd Count:'+ counts[tm]
     #print(txt)
     if counter <= fps:
-        cv2.putText(img, txt[:-1], (36, 36), font, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
+        cv2.putText(img, txt[:-1], (36, 36), font, 1.5, (0, 0, 0), 2, cv2.LINE_AA)
     else:
-        cv2.putText(img, txt[:-1], (36, 36), font, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
+        cv2.putText(img, txt[:-1], (36, 36), font, 1.5, (0, 0, 0), 2, cv2.LINE_AA)
         counter = 0
         tm += 1
     return img
